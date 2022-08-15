@@ -1,9 +1,11 @@
 import * as Three from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import Stats from "three/examples/jsm/libs/stats.module";
 
 import CharacterControllerInput from "./Controls/CharacterControllerInput";
 
 export default class ThirdPersonScene extends Three.Scene {
-  private readonly threejs = new Three.WebGLRenderer({
+  private readonly renderer = new Three.WebGLRenderer({
     antialias: true,
   });
 
@@ -14,13 +16,7 @@ export default class ThirdPersonScene extends Three.Scene {
     1000
   );
   private readonly dLight = new Three.DirectionalLight(0xffffff, 1.0);
-  private readonly axesHelper = new Three.AxesHelper(100);
-  private readonly gridHelper = new Three.GridHelper(
-    100,
-    100,
-    "green",
-    "green"
-  );
+  
   private readonly plane = new Three.Mesh(
     new Three.PlaneGeometry(100, 100, 10, 10),
     new Three.MeshBasicMaterial({
@@ -28,6 +24,18 @@ export default class ThirdPersonScene extends Three.Scene {
       side: Three.DoubleSide,
     })
   );
+
+  // helpers
+  private readonly axesHelper = new Three.AxesHelper(100);
+  private readonly gridHelper = new Three.GridHelper(
+    100,
+    100,
+    "green",
+    "green"
+  );
+  private readonly dLightHelper = new Three.DirectionalLightHelper(this.dLight, 1, "purple");
+  private readonly stats = Stats();
+  private readonly orbControls = new OrbitControls(this.camera, this.renderer.domElement)
 
   constructor() {
     super();
@@ -48,11 +56,15 @@ export default class ThirdPersonScene extends Three.Scene {
     const material = new Three.MeshBasicMaterial({ color: 0x1ea896 });
     const cube = new Three.Mesh(geometry, material);
     cube.position.set(0, 1, 0);
+    cube.castShadow = true;
+    cube.receiveShadow = true;
     this.add(cube);
 
     window.addEventListener("resize", () => {
       this.onResize();
     });
+
+    document.body.appendChild(this.stats.dom);
 
     new CharacterControllerInput();
 
@@ -60,17 +72,17 @@ export default class ThirdPersonScene extends Three.Scene {
   }
 
   setCanvas() {
-    this.threejs.outputEncoding = Three.sRGBEncoding;
-    this.threejs.shadowMap.enabled = true;
-    this.threejs.shadowMap.type = Three.PCFSoftShadowMap;
-    this.threejs.setPixelRatio(window.devicePixelRatio);
-    this.threejs.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.outputEncoding = Three.sRGBEncoding;
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = Three.PCFSoftShadowMap;
+    this.renderer.setPixelRatio(window.devicePixelRatio);
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
 
-    document.body.appendChild(this.threejs.domElement);
+    document.body.appendChild(this.renderer.domElement);
   }
 
   setDLight() {
-    this.dLight.position.set(-100, 100, 100);
+    this.dLight.position.set(10, 20, 15);
     this.dLight.target.position.set(0, 0, 0);
     this.dLight.castShadow = true;
     this.dLight.shadow.bias = -0.001;
@@ -86,7 +98,7 @@ export default class ThirdPersonScene extends Three.Scene {
     this.dLight.shadow.camera.bottom = -50;
 
     this.add(this.dLight);
-    this.add(new Three.DirectionalLightHelper(this.dLight, 1, "purple"));
+    this.add(this.dLightHelper);
   }
 
   setPlain() {
@@ -100,12 +112,15 @@ export default class ThirdPersonScene extends Three.Scene {
   onResize() {
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
-    this.threejs.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
 
   RAF() {
     requestAnimationFrame(() => {
-      this.threejs.render(this, this.camera);
+      this.renderer.render(this, this.camera);
+      this.stats.update();
+      this.orbControls.update();
+      this.dLightHelper.update();
       this.RAF();
     });
   }
