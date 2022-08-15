@@ -1,6 +1,7 @@
 import * as Three from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import Stats from "three/examples/jsm/libs/stats.module";
+import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
 
 import CharacterControllerInput from "./Controls/CharacterControllerInput";
 
@@ -16,7 +17,7 @@ export default class ThirdPersonScene extends Three.Scene {
     1000
   );
   private readonly dLight = new Three.DirectionalLight(0xffffff, 1.0);
-  
+
   private readonly plane = new Three.Mesh(
     new Three.PlaneGeometry(100, 100, 10, 10),
     new Three.MeshBasicMaterial({
@@ -33,9 +34,18 @@ export default class ThirdPersonScene extends Three.Scene {
     "green",
     "green"
   );
-  private readonly dLightHelper = new Three.DirectionalLightHelper(this.dLight, 1, "purple");
+  private readonly dLightHelper = new Three.DirectionalLightHelper(
+    this.dLight,
+    1,
+    "purple"
+  );
   private readonly stats = Stats();
-  private readonly orbControls = new OrbitControls(this.camera, this.renderer.domElement)
+  private readonly orbControls = new OrbitControls(
+    this.camera,
+    this.renderer.domElement
+  );
+
+  private mixer: Three.AnimationMixer | undefined;
 
   constructor() {
     super();
@@ -55,7 +65,7 @@ export default class ThirdPersonScene extends Three.Scene {
     const geometry = new Three.BoxGeometry(2, 4, 2);
     const material = new Three.MeshBasicMaterial({ color: 0x1ea896 });
     const cube = new Three.Mesh(geometry, material);
-    cube.position.set(0, 1, 0);
+    cube.position.set(10, 2, 0);
     cube.castShadow = true;
     cube.receiveShadow = true;
     this.add(cube);
@@ -67,6 +77,8 @@ export default class ThirdPersonScene extends Three.Scene {
     document.body.appendChild(this.stats.dom);
 
     new CharacterControllerInput();
+
+    this.loadAnimatedModel("./public/assets/");
 
     this.RAF();
   }
@@ -109,6 +121,27 @@ export default class ThirdPersonScene extends Three.Scene {
     this.add(this.plane);
   }
 
+  loadAnimatedModel(path: string) {
+    const model = new FBXLoader();
+    model.setPath(path);
+    model.load("xbot.fbx", (fbx) => {
+      fbx.scale.setScalar(0.1);
+      fbx.traverse((c) => {
+        c.castShadow = true;
+      });
+
+      const animation = new FBXLoader();
+      animation.setPath(path);
+      animation.load("Idle.fbx", (anim) => {
+        this.mixer = new Three.AnimationMixer(fbx);
+        const idle = this.mixer.clipAction(anim.animations[0]);
+        idle.play();
+      });
+
+      this.add(fbx);
+    });
+  }
+
   onResize() {
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
@@ -121,6 +154,7 @@ export default class ThirdPersonScene extends Three.Scene {
       this.stats.update();
       this.orbControls.update();
       this.dLightHelper.update();
+      this.mixer?.update(2);
       this.RAF();
     });
   }
