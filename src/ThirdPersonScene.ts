@@ -45,7 +45,8 @@ export default class ThirdPersonScene extends Three.Scene {
     this.renderer.domElement
   );
 
-  private mixer: Three.AnimationMixer | undefined;
+  private mixer: Three.AnimationMixer | null = null;
+  private previousRAF: number | null = null;
 
   constructor() {
     super();
@@ -149,13 +150,28 @@ export default class ThirdPersonScene extends Three.Scene {
   }
 
   RAF() {
-    requestAnimationFrame(() => {
+    requestAnimationFrame((t) => {
+      if (!this.previousRAF) {
+        this.previousRAF = t;
+      }
+
+      this.RAF();
+
       this.renderer.render(this, this.camera);
       this.stats.update();
       this.orbControls.update();
       this.dLightHelper.update();
-      this.mixer?.update(2);
-      this.RAF();
+      this.step(t - this.previousRAF);
+
+      this.previousRAF = t;
     });
+  }
+
+  step(timeElapsed: number) {
+    const elapsed = timeElapsed * 0.001;
+
+    if (this.mixer) {
+      this.mixer.update(elapsed);
+    }
   }
 }
