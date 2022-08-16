@@ -3,7 +3,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import Stats from "three/examples/jsm/libs/stats.module";
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
 
-import CharacterControllerInput from "./Controls/CharacterControllerInput";
+import CharacterControllerInput from "./Character/Controls/CharacterControllerInput";
 
 export default class ThirdPersonScene extends Three.Scene {
   private readonly renderer = new Three.WebGLRenderer({

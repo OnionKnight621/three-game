@@ -9,7 +9,7 @@ interface keyMappings {
 }
 
 export default class CharacterControllerInput {
-  private keys: keyMappings = {
+  keys: keyMappings = {
     forward: false,
     backward: false,
     left: false,
@@ -24,7 +24,7 @@ export default class CharacterControllerInput {
     document.addEventListener("keyup", this.onKeyUp.bind(this));
   }
 
-  onKeyDown(e: KeyboardEvent) {
+  onKeyDown(e: KeyboardEvent): void {
     switch (e.code.toLowerCase()) {
       case "arrowup":
       case "keyw":
@@ -57,7 +57,7 @@ export default class CharacterControllerInput {
     }
   }
 
-  onKeyUp(e: KeyboardEvent) {
+  onKeyUp(e: KeyboardEvent): void {
     switch (e.code.toLowerCase()) {
       case "arrowup":
       case "keyw":
