@@ -84,7 +84,7 @@ export default class ThirdPersonScene extends Three.Scene {
     this.RAF();
   }
 
-  setCanvas() {
+  private setCanvas(): void {
     this.renderer.outputEncoding = Three.sRGBEncoding;
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = Three.PCFSoftShadowMap;
@@ -94,7 +94,7 @@ export default class ThirdPersonScene extends Three.Scene {
     document.body.appendChild(this.renderer.domElement);
   }
 
-  setDLight() {
+  private setDLight(): void {
     this.dLight.position.set(10, 20, 15);
     this.dLight.target.position.set(0, 0, 0);
     this.dLight.castShadow = true;
@@ -114,7 +114,7 @@ export default class ThirdPersonScene extends Three.Scene {
     this.add(this.dLightHelper);
   }
 
-  setPlain() {
+  private setPlain(): void {
     this.plane.castShadow = false;
     this.plane.receiveShadow = true;
     this.plane.rotation.x = -Math.PI / 2;
@@ -122,7 +122,7 @@ export default class ThirdPersonScene extends Three.Scene {
     this.add(this.plane);
   }
 
-  loadAnimatedModel(path: string) {
+  private loadAnimatedModel(path: string): void {
     const model = new FBXLoader();
     model.setPath(path);
     model.load("xbot.fbx", (fbx) => {
@@ -143,13 +143,13 @@ export default class ThirdPersonScene extends Three.Scene {
     });
   }
 
-  onResize() {
+  private onResize(): void {
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
 
-  RAF() {
+  private RAF(): void {
     requestAnimationFrame((t) => {
       if (!this.previousRAF) {
         this.previousRAF = t;
@@ -167,7 +167,7 @@ export default class ThirdPersonScene extends Three.Scene {
     });
   }
 
-  step(timeElapsed: number) {
+  private step(timeElapsed: number): void {
     const elapsed = timeElapsed * 0.001;
 
     if (this.mixer) {
