@@ -7,7 +7,6 @@ export default class StateMachine {
   }
 
   public SetState(name: string): void {
-    console.log("set state", name);
     const prevState = this.currentState;
 
     if (prevState) {
