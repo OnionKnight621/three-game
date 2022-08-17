@@ -28,6 +28,7 @@ export default class WalkState extends State {
 
   public Exit(): void {}
 
+  // @ts-ignore
   protected Update(timeElapsed: number, input: CharacterControllerInput): void {
     if (
       input.keys.forward ||

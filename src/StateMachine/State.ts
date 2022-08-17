@@ -9,7 +9,9 @@ export default class State {
     return "name";
   }
 
+  // @ts-ignore
   protected Enter(prevState: any): void {}
   protected Exit(): void {}
+  // @ts-ignore
   protected Update(timeElapsed: number, input: any): void {}
 }

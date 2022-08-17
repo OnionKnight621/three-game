@@ -7,9 +7,9 @@ import CharacterStateMachine from "./CharacterStateMachine";
 import CharacterControllerInput from "./Controls/CharacterControllerInput";
 
 export default class CharacterController {
-  private acceleration = new Three.Vector3(1, 0.25, 50.0);
-  private decceleration = new Three.Vector3(-0.0005, -0.0001, -5.0);
-  private velocilty = new Three.Vector3(0, 0, 0);
+  // private acceleration = new Three.Vector3(1, 0.25, 50.0);
+  // private decceleration = new Three.Vector3(-0.0005, -0.0001, -5.0);
+  // private velocilty = new Three.Vector3(0, 0, 0);
 
   private animations: any = {};
   private input = new CharacterControllerInput();
