@@ -26,12 +26,12 @@ export default class CharacterController {
 
     this.scene = scene;
 
-    this.loadModels();
+    this.loadModels("../../public/");
   }
 
-  private loadModels() {
+  private loadModels(path: string) {
     const loader = new FBXLoader();
-    loader.setPath("./public/assets/");
+    loader.setPath(path);
     loader.load("xbot.fbx", (fbx) => {
       fbx.scale.setScalar(0.1);
       fbx.traverse((c) => {
@@ -59,7 +59,7 @@ export default class CharacterController {
       };
 
       const loader = new FBXLoader(this.loadManager);
-      loader.setPath("./public/assets/");
+      loader.setPath(path);
       loader.load("Walking.fbx", (a) => {
         onLoad(states.walk, a);
       });
