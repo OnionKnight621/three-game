@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "git:add": "git add dist -f",
     "git:commit": "git commit -m \"add dist\"",
-    "git:subtree": "git subtree push --prefix dist origin gh-pages"
+    "git:subtree": "git subtree push --prefix dist origin gh-pages",
+    "git:deploy": "npm run build && npm run git:add && npm run git:commit && npm run git:subtree"
   },
   "devDependencies": {
     "@types/three": "^0.143.0",
