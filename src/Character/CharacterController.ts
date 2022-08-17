@@ -21,12 +21,15 @@ export default class CharacterController {
   private scene: any;
 
   constructor(scene: ThirdPersonScene) {
-    // this.input = new CharacterControllerInput();
-    // this.stateMachine = new CharacterStateMachine(this.animations);
-
     this.scene = scene;
 
-    this.loadModels("../../public/");
+    let path = "/public/model/";
+
+    if (window.location.host === "onionknight621.github.io") {
+      path = "https://onionknight621.github.io/three-game/model/"; // TODO: prepare smth more convenient
+    }
+
+    this.loadModels(path);
   }
 
   private loadModels(path: string) {
