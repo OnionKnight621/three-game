@@ -1,15 +1,16 @@
 import StateMachine from "../StateMachine/StateMachine";
 import IdleState from "../StateMachine/states/Idle";
-
-const states = {
-    idle: "idle",
-    walk: "walk"
-}
+import WalkState from "../StateMachine/states/Walk";
+import { states } from "../StateMachine/states";
 
 export default class CharacterStateMachine extends StateMachine {
-    constructor() {
-        super();
+  protected animations: any;
 
-        this.AddState(states.idle, IdleState);
-    }
+  constructor(animations: any) {
+    super();
+    this.animations = animations;
+
+    this.AddState(states.idle, IdleState);
+    this.AddState(states.walk, WalkState);
+  }
 }

@@ -2,25 +2,23 @@ import { states } from ".";
 import CharacterControllerInput from "../../Character/Controls/CharacterControllerInput";
 import State from "../State";
 
-export default class IdleState extends State {
+export default class WalkState extends State {
   constructor(parent: any) {
     super(parent);
   }
 
   get name() {
-    return states.idle;
+    return states.walk;
   }
 
   protected Enter(prevState: any): void {
-    const curAction = this.parent.animations[states.idle].action;
+    const curAction = this.parent.animations[states.walk].action;
 
     if (prevState) {
       const prevAction = this.parent.animations[prevState.name].action;
 
-      curAction.time = 0.0;
       curAction.enabled = true;
-      curAction.setEffectiveTimeScale(1.0);
-      curAction.setEffectiveWeight(1.0);
+
       curAction.crossFadeFrom(prevAction, 0.5, true);
       curAction.play();
     } else {
@@ -37,9 +35,9 @@ export default class IdleState extends State {
       input.keys.left ||
       input.keys.right
     ) {
-      this.parent.SetState(states.walk);
-    } else {
-      this.parent.SetState(states.idle);
+      return;
     }
+
+    this.parent.SetState(states.idle);
   }
 }

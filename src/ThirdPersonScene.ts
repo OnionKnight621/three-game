@@ -1,8 +1,8 @@
 import * as Three from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import Stats from "three/examples/jsm/libs/stats.module";
-import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
 
+import CharacterController from "./Character/CharacterController";
 import CharacterControllerInput from "./Character/Controls/CharacterControllerInput";
 
 export default class ThirdPersonScene extends Three.Scene {
@@ -45,8 +45,9 @@ export default class ThirdPersonScene extends Three.Scene {
     this.renderer.domElement
   );
 
-  private mixer: Three.AnimationMixer | null = null;
+  private mixers: any = [];
   private previousRAF: number | null = null;
+  private controls: CharacterController | null = null;
 
   constructor() {
     super();
@@ -79,7 +80,7 @@ export default class ThirdPersonScene extends Three.Scene {
 
     new CharacterControllerInput();
 
-    this.loadAnimatedModel("./public/assets/");
+    this.loadCharacter();
 
     this.RAF();
   }
@@ -122,25 +123,8 @@ export default class ThirdPersonScene extends Three.Scene {
     this.add(this.plane);
   }
 
-  private loadAnimatedModel(path: string): void {
-    const model = new FBXLoader();
-    model.setPath(path);
-    model.load("xbot.fbx", (fbx) => {
-      fbx.scale.setScalar(0.1);
-      fbx.traverse((c) => {
-        c.castShadow = true;
-      });
-
-      const animation = new FBXLoader();
-      animation.setPath(path);
-      animation.load("Idle.fbx", (anim) => {
-        this.mixer = new Three.AnimationMixer(fbx);
-        const idle = this.mixer.clipAction(anim.animations[0]);
-        idle.play();
-      });
-
-      this.add(fbx);
-    });
+  private loadCharacter() {
+    this.controls = new CharacterController(this);
   }
 
   private onResize(): void {
@@ -170,8 +154,10 @@ export default class ThirdPersonScene extends Three.Scene {
   private step(timeElapsed: number): void {
     const elapsed = timeElapsed * 0.001;
 
-    if (this.mixer) {
-      this.mixer.update(elapsed);
+    this.mixers.map((m: any) => m.update(elapsed));
+
+    if (this.controls) {
+      this.controls.Update(elapsed);
     }
   }
 }

@@ -1,13 +1,15 @@
 export default class State {
-  protected name: string | undefined;
+  protected parent: any;
 
-  protected Enter(): void {
-    console.log("Enter state:", this.name);
+  constructor(parent: any) {
+    this.parent = parent;
   }
-  protected Exit(): void {
-    console.log("Exit state:", this.name);
+
+  protected get name() {
+    return "name";
   }
-  protected Update(timeElapsed: number, input: any): void {
-    console.log("Update state:", this.name, input);
-  }
+
+  protected Enter(prevState: any): void {}
+  protected Exit(): void {}
+  protected Update(timeElapsed: number, input: any): void {}
 }
