@@ -36,7 +36,7 @@ export default class CharacterController {
     const loader = new FBXLoader();
     loader.setPath(path);
     loader.load("xbot.fbx", (fbx) => {
-      fbx.scale.setScalar(0.1);
+      fbx.scale.setScalar(0.06);
       fbx.traverse((c) => {
         c.castShadow = true;
       });

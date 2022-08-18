@@ -54,7 +54,7 @@ export default class ThirdPersonScene extends Three.Scene {
 
     this.setCanvas();
 
-    this.camera.position.set(0, 35, 20);
+    this.camera.position.set(0, 35, -25);
     this.camera.lookAt(0, 0, 0);
 
     this.setDLight();
