@@ -65,7 +65,7 @@ export default class ThirdPersonScene extends Three.Scene {
     this.add(this.gridHelper);
 
     const geometry = new Three.BoxGeometry(2, 4, 2);
-    const material = new Three.MeshBasicMaterial({ color: 0x1ea896 });
+    const material = new Three.MeshBasicMaterial({ color: "red" });
     const cube = new Three.Mesh(geometry, material);
     cube.position.set(10, 2, 0);
     cube.castShadow = true;
