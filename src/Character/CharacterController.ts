@@ -7,18 +7,14 @@ import CharacterStateMachine from "./CharacterStateMachine";
 import CharacterControllerInput from "./Controls/CharacterControllerInput";
 
 export default class CharacterController {
-  private acceleration = new Three.Vector3(1, 0.25, 50.0);
-  private decceleration = new Three.Vector3(-0.0005, -0.0001, -5.0);
-  private velocilty = new Three.Vector3(0, 0, 0);
-
   private animations: any = {};
   private input = new CharacterControllerInput();
   private stateMachine = new CharacterStateMachine(this.animations);
-  private mixer: Three.AnimationMixer | undefined;
-  private loadManager: Three.LoadingManager | undefined;
-  private target: any;
 
-  private scene: any;
+  private mixer?: Three.AnimationMixer;
+  private loadManager?: Three.LoadingManager;
+  private target?: Three.Group;
+  private scene?: ThirdPersonScene;
 
   constructor(scene: ThirdPersonScene) {
     this.scene = scene;
@@ -42,7 +38,7 @@ export default class CharacterController {
       });
 
       this.target = fbx;
-      this.scene.add(this.target);
+      this.scene?.add(this.target);
 
       this.mixer = new Three.AnimationMixer(this.target);
 
@@ -79,63 +75,24 @@ export default class CharacterController {
 
     this.stateMachine.Update(timeInSeconds, this.input);
 
-    const velocity = this.velocilty;
-    const frameDecceleration = new Three.Vector3(
-        velocity.x * this.decceleration.x,
-        velocity.y * this.decceleration.y,
-        velocity.z * this.decceleration.z
-    );
-    frameDecceleration.multiplyScalar(timeInSeconds);
-    frameDecceleration.z = Math.sign(frameDecceleration.z) * Math.min(
-        Math.abs(frameDecceleration.z), Math.abs(velocity.z));
-
-    velocity.add(frameDecceleration);
-
     const controlObject = this.target;
-    const _Q = new Three.Quaternion();
-    const _A = new Three.Vector3();
-    const _R = controlObject.quaternion.clone();
-
-    const acc = this.acceleration.clone();
 
     if (this.input.keys.forward) {
-      velocity.z += acc.z * timeInSeconds;
+      controlObject.position.z += 0.1;
+      controlObject.rotation.y = 0 * Math.PI;
+    }
+    if (this.input.keys.left) {
+      controlObject.position.x += 0.1;
+      controlObject.rotation.y = 0.5 * Math.PI;
     }
     if (this.input.keys.backward) {
-      velocity.z -= acc.z * timeInSeconds;
-    }
-
-    if (this.input.keys.left) {
-      _A.set(0, 1, 0);
-      _Q.setFromAxisAngle(_A, 4.0 * Math.PI * timeInSeconds * this.acceleration.y);
-      _R.multiply(_Q);
+      controlObject.position.z -= 0.1;
+      controlObject.rotation.y = 1.0 * Math.PI;
     }
     if (this.input.keys.right) {
-      _A.set(0, 1, 0);
-      _Q.setFromAxisAngle(_A, 4.0 * -Math.PI * timeInSeconds * this.acceleration.y);
-      _R.multiply(_Q);
+      controlObject.position.x -= 0.1;
+      controlObject.rotation.y = 1.5 * Math.PI;
     }
-
-    controlObject.quaternion.copy(_R);
-
-    const oldPosition = new Three.Vector3();
-    oldPosition.copy(controlObject.position);
-
-    const forward = new Three.Vector3(0, 0, 1);
-    forward.applyQuaternion(controlObject.quaternion);
-    forward.normalize();
-
-    const sideways = new Three.Vector3(1, 0, 0);
-    sideways.applyQuaternion(controlObject.quaternion);
-    sideways.normalize();
-
-    sideways.multiplyScalar(velocity.x * timeInSeconds);
-    forward.multiplyScalar(velocity.z * timeInSeconds);
-
-    controlObject.position.add(forward);
-    controlObject.position.add(sideways);
-
-    oldPosition.copy(controlObject.position);
 
     if (this.mixer) {
       this.mixer.update(timeInSeconds);
