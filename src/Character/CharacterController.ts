@@ -137,8 +137,6 @@ export default class CharacterController {
 
     oldPosition.copy(controlObject.position);
 
-    console.log(controlObject.position, "pos")
-
     if (this.mixer) {
       this.mixer.update(timeInSeconds);
     }
