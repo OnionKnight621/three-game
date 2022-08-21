@@ -73,23 +73,49 @@ export default class CharacterController {
       return;
     }
 
+    const fwd = this.input.keys.forward;
+    const bwd = this.input.keys.backward;
+    const left = this.input.keys.left;
+    const right = this.input.keys.right;
+
     this.stateMachine.Update(timeInSeconds, this.input);
 
     const controlObject = this.target;
 
-    if (this.input.keys.forward) {
+    // TODO: figure out smth more convenient
+    if (fwd && !left && !right) {
       controlObject.position.z += 0.1;
       controlObject.rotation.y = 0 * Math.PI;
     }
-    if (this.input.keys.left) {
+    if (fwd && left && !right) {
+      controlObject.position.z += 0.1;
       controlObject.position.x += 0.1;
-      controlObject.rotation.y = 0.5 * Math.PI;
+      controlObject.rotation.y = 0.25 * Math.PI;
     }
-    if (this.input.keys.backward) {
+    if (fwd && !left && right) {
+      controlObject.position.z += 0.1;
+      controlObject.position.x -= 0.1;
+      controlObject.rotation.y = 1.75 * Math.PI;
+    }
+    if (bwd && !left && !right) {
       controlObject.position.z -= 0.1;
       controlObject.rotation.y = 1.0 * Math.PI;
     }
-    if (this.input.keys.right) {
+    if (bwd && left && !right) {
+      controlObject.position.z -= 0.1;
+      controlObject.position.x += 0.1;
+      controlObject.rotation.y = 0.75 * Math.PI;
+    }
+    if (bwd && !left && right) {
+      controlObject.position.z -= 0.1;
+      controlObject.position.x -= 0.1;
+      controlObject.rotation.y = 1.25 * Math.PI;
+    }
+    if (left && !fwd && !bwd) {
+      controlObject.position.x += 0.1;
+      controlObject.rotation.y = 0.5 * Math.PI;
+    }
+    if (right && !fwd && !bwd) {
       controlObject.position.x -= 0.1;
       controlObject.rotation.y = 1.5 * Math.PI;
     }
