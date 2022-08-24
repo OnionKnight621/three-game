@@ -66,13 +66,27 @@ export default class CharacterController {
 
       const loader = new FBXLoader(this.loadManager);
       loader.setPath(path);
-      loader.load("Walking.fbx", (a) => {
-        onLoad(states.walk, a);
+
+      const walk = new Promise((resolve) => {
+        loader.load("Walking.fbx", (a) => {
+          resolve(onLoad(states.walk, a));
+        });
       });
-      loader.load("Idle.fbx", (a) => {
-        onLoad(states.idle, a);
+      const idle = new Promise((resolve) => {
+        loader.load("Idle.fbx", (a) => {
+          resolve(onLoad(states.idle, a));
+        });
+      });
+
+      Promise.all([walk, idle]).then(() => {
+        this.removeLoaderModal();
       });
     });
+  }
+
+  private removeLoaderModal() {
+    const loader = document.getElementById("loading") as HTMLDivElement;
+    loader.style.display = "none";
   }
 
   public Update(timeInSeconds: number) {

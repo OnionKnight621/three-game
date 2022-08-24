@@ -2,3 +2,35 @@ body {
   margin: 0;
   padding: 0;
 }
+
+#loading {
+  background: #564e58;
+  border: 3px solid #252627;
+  border-radius: 1rem;
+  position: fixed;
+  padding: 5rem;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: 50%;
+  height: 50%;
+  font-size: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#loading > h2 {
+  color: #252627;
+  font-family: Helvetica, Arial, sans-serif;
+  text-shadow: 4px 4px 5px #904e55;
+  -webkit-animation: spin 3s linear infinite;
+  -moz-animation: spin 3s linear infinite;
+  animation: spin 3s linear infinite;
+}
+
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
