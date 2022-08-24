@@ -109,13 +109,13 @@ export default class CharacterController {
       controlObject.rotation.y = 0 * Math.PI;
     }
     if (fwd && left && !right) {
-      controlObject.position.z += 0.1;
-      controlObject.position.x += 0.1;
+      controlObject.position.z += 0.075;
+      controlObject.position.x += 0.075;
       controlObject.rotation.y = 0.25 * Math.PI;
     }
     if (fwd && !left && right) {
-      controlObject.position.z += 0.1;
-      controlObject.position.x -= 0.1;
+      controlObject.position.z += 0.075;
+      controlObject.position.x -= 0.075;
       controlObject.rotation.y = 1.75 * Math.PI;
     }
     if (bwd && !left && !right) {
@@ -123,13 +123,13 @@ export default class CharacterController {
       controlObject.rotation.y = 1.0 * Math.PI;
     }
     if (bwd && left && !right) {
-      controlObject.position.z -= 0.1;
-      controlObject.position.x += 0.1;
+      controlObject.position.z -= 0.075;
+      controlObject.position.x += 0.075;
       controlObject.rotation.y = 0.75 * Math.PI;
     }
     if (bwd && !left && right) {
-      controlObject.position.z -= 0.1;
-      controlObject.position.x -= 0.1;
+      controlObject.position.z -= 0.075;
+      controlObject.position.x -= 0.075;
       controlObject.rotation.y = 1.25 * Math.PI;
     }
     if (left && !fwd && !bwd) {
