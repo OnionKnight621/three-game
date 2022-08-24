@@ -2,11 +2,12 @@ import StateMachine from "../StateMachine/StateMachine";
 import IdleState from "../StateMachine/states/Idle";
 import WalkState from "../StateMachine/states/Walk";
 import { states } from "../StateMachine/states";
+import { Animations } from "./CharacterController";
 
 export default class CharacterStateMachine extends StateMachine {
-  protected animations: any;
+  public animations: Animations;
 
-  constructor(animations: any) {
+  constructor(animations: Animations) {
     super();
     this.animations = animations;
 

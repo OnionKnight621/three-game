@@ -1,17 +1,21 @@
-export default class State {
-  protected parent: any;
+import CharacterStateMachine from "../Character/CharacterStateMachine";
+import CharacterControllerInput from "../Character/Controls/CharacterControllerInput";
+import { state } from "./StateMachine";
 
-  constructor(parent: any) {
-    this.parent = parent;
+export default class State {
+  protected characterSM: CharacterStateMachine;
+
+  constructor(characterSM: CharacterStateMachine) {
+    this.characterSM = characterSM;
   }
 
-  protected get name() {
+  public get name() {
     return "name";
   }
 
   // @ts-ignore
-  protected Enter(prevState: any): void {}
-  protected Exit(): void {}
+  public Enter(prevState: state): void {}
+  public Exit(): void {}
   // @ts-ignore
-  protected Update(timeElapsed: number, input: any): void {}
+  public Update(timeElapsed: number, input: CharacterControllerInput): void {}
 }

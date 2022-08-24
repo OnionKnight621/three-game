@@ -1,24 +1,27 @@
 import { states } from ".";
+import CharacterStateMachine from "../../Character/CharacterStateMachine";
 import CharacterControllerInput from "../../Character/Controls/CharacterControllerInput";
 import State from "../State";
+import { state } from "../StateMachine";
 
 export default class WalkState extends State {
-  constructor(parent: any) {
-    super(parent);
+  constructor(characterSM: CharacterStateMachine) {
+    super(characterSM);
   }
 
-  get name() {
+  public get name() {
     return states.walk;
   }
 
-  protected Enter(prevState: any): void {
-    const curAction = this.parent.animations[states.walk].action;
+  public Enter(prevState: state): void {
+    const curAction = this.characterSM.animations[states.walk].action;
+
+    if (!curAction) return;
 
     if (prevState) {
-      const prevAction = this.parent.animations[prevState.name].action;
+      const prevAction = this.characterSM.animations[prevState.name].action;
 
       curAction.enabled = true;
-
       curAction.crossFadeFrom(prevAction, 0.5, true);
       curAction.play();
     } else {
@@ -29,7 +32,17 @@ export default class WalkState extends State {
   public Exit(): void {}
 
   // @ts-ignore
-  protected Update(timeElapsed: number, input: CharacterControllerInput): void {
+  public Update(timeElapsed: number, input: CharacterControllerInput): void {
+    if (input.keys.forward && input.keys.backward) {
+      this.characterSM.SetState(states.idle);
+      return;
+    }
+
+    if (input.keys.right && input.keys.left) {
+      this.characterSM.SetState(states.idle);
+      return;
+    }
+
     if (
       input.keys.forward ||
       input.keys.backward ||
@@ -39,6 +52,6 @@ export default class WalkState extends State {
       return;
     }
 
-    this.parent.SetState(states.idle);
+    this.characterSM.SetState(states.idle);
   }
 }

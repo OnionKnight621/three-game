@@ -45,9 +45,9 @@ export default class ThirdPersonScene extends Three.Scene {
     this.renderer.domElement
   );
 
-  private mixers: any = [];
-  private previousRAF: number | null = null;
-  private controls: CharacterController | null = null;
+  private mixers: Three.AnimationMixer[] = [];
+  private previousRAF?: number;
+  private controls?: CharacterController;
 
   constructor() {
     super();
@@ -154,7 +154,7 @@ export default class ThirdPersonScene extends Three.Scene {
   private step(timeElapsed: number): void {
     const elapsed = timeElapsed * 0.001;
 
-    this.mixers.map((m: any) => m.update(elapsed));
+    this.mixers.map((m) => m.update(elapsed));
 
     if (this.controls) {
       this.controls.Update(elapsed);

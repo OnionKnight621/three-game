@@ -1,8 +1,15 @@
-export default class StateMachine {
-  private states: any = {};
-  private currentState: any = null;
+import CharacterControllerInput from "../Character/Controls/CharacterControllerInput";
+import State from "./State";
+import IdleState from "./states/Idle";
+import WalkState from "./states/Walk";
 
-  protected AddState(name: string, type: any) {
+export type state = typeof IdleState | typeof WalkState;
+
+export default class StateMachine {
+  private states: any = {}; // TODO: set proper type for this mess
+  private currentState?: State;
+
+  protected AddState(name: string, type: state) {
     this.states[name] = type;
   }
 
@@ -22,7 +29,7 @@ export default class StateMachine {
     state.Enter(prevState);
   }
 
-  public Update(timeElapsed: number, input: any): void {
+  public Update(timeElapsed: number, input: CharacterControllerInput): void {
     if (this.currentState) {
       this.currentState.Update(timeElapsed, input);
     }

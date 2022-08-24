@@ -6,8 +6,15 @@ import ThirdPersonScene from "../ThirdPersonScene";
 import CharacterStateMachine from "./CharacterStateMachine";
 import CharacterControllerInput from "./Controls/CharacterControllerInput";
 
+export interface Animations {
+  [key: string]: {
+    clip: Three.AnimationClip;
+    action: Three.AnimationAction;
+  };
+}
+
 export default class CharacterController {
-  private animations: any = {};
+  private animations: Animations = {};
   private input = new CharacterControllerInput();
   private stateMachine = new CharacterStateMachine(this.animations);
 
@@ -47,13 +54,13 @@ export default class CharacterController {
         this.stateMachine.SetState("idle");
       };
 
-      const onLoad = (animName: string, anim: any) => {
+      const onLoad = (animName: string, anim: Three.Group) => {
         const clip = anim.animations[0];
-        const action = this.mixer?.clipAction(clip);
+        const action = this.mixer?.clipAction(clip) as Three.AnimationAction;
 
         this.animations[animName] = {
-          clip: clip,
-          action: action,
+          clip,
+          action,
         };
       };
 

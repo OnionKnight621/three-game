@@ -1,4 +1,4 @@
 export const states = {
-    idle: "idle",
-    walk: "walk"
-}
+  idle: "idle",
+  walk: "walk",
+};
