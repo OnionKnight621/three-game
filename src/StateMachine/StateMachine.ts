@@ -1,15 +1,16 @@
 import CharacterControllerInput from "../Character/Controls/CharacterControllerInput";
 import State from "./State";
 import IdleState from "./states/Idle";
+import RollState from "./states/Roll";
 import WalkState from "./states/Walk";
 
-export type state = typeof IdleState | typeof WalkState;
+export type stateType = typeof IdleState | typeof WalkState | typeof RollState;
 
 export default class StateMachine {
   private states: any = {}; // TODO: set proper type for this mess
   private currentState?: State;
 
-  protected AddState(name: string, type: state) {
+  protected AddState(name: string, type: stateType) {
     this.states[name] = type;
   }
 

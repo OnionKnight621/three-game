@@ -1,6 +1,6 @@
 import CharacterStateMachine from "../Character/CharacterStateMachine";
 import CharacterControllerInput from "../Character/Controls/CharacterControllerInput";
-import { state } from "./StateMachine";
+import { stateType } from "./StateMachine";
 
 export default class State {
   protected characterSM: CharacterStateMachine;
@@ -14,7 +14,9 @@ export default class State {
   }
 
   // @ts-ignore
-  public Enter(prevState: state): void {}
+  public Enter(prevState: stateType): void {}
+  public Finished(): void {}
+  public Cleanup(): void {}
   public Exit(): void {}
   // @ts-ignore
   public Update(timeElapsed: number, input: CharacterControllerInput): void {}

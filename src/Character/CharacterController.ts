@@ -77,8 +77,13 @@ export default class CharacterController {
           resolve(onLoad(states.idle, a));
         });
       });
+      const roll = new Promise((resolve) => {
+        loader.load("Roll.fbx", (a) => {
+          resolve(onLoad(states.roll, a));
+        });
+      });
 
-      Promise.all([walk, idle]).then(() => {
+      Promise.all([walk, idle, roll]).then(() => {
         this.removeLoaderModal();
       });
     });

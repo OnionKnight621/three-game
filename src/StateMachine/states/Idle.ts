@@ -2,7 +2,7 @@ import { states } from ".";
 import CharacterStateMachine from "../../Character/CharacterStateMachine";
 import CharacterControllerInput from "../../Character/Controls/CharacterControllerInput";
 import State from "../State";
-import { state } from "../StateMachine";
+import { stateType } from "../StateMachine";
 
 export default class IdleState extends State {
   constructor(characterSM: CharacterStateMachine) {
@@ -13,7 +13,7 @@ export default class IdleState extends State {
     return states.idle;
   }
 
-  public Enter(prevState: state): void {
+  public Enter(prevState: stateType): void {
     const curAction = this.characterSM.animations[states.idle].action;
 
     if (!curAction) return;
@@ -25,14 +25,12 @@ export default class IdleState extends State {
       curAction.enabled = true;
       curAction.setEffectiveTimeScale(1.0);
       curAction.setEffectiveWeight(1.0);
-      curAction.crossFadeFrom(prevAction, 0.5, true);
+      curAction.crossFadeFrom(prevAction, 0.2, true);
       curAction.play();
     } else {
       curAction.play();
     }
   }
-
-  public Exit(): void {}
 
   // @ts-ignore
   public Update(timeElapsed: number, input: CharacterControllerInput): void {
@@ -43,6 +41,11 @@ export default class IdleState extends State {
       input.keys.right
     ) {
       this.characterSM.SetState(states.walk);
+      return;
+    }
+
+    if (input.keys.space) {
+      this.characterSM.SetState(states.roll);
       return;
     }
 
